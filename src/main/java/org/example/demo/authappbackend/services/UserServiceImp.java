@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.example.demo.authappbackend.dto.UserDto;
 import org.example.demo.authappbackend.entites.Provider;
 import org.example.demo.authappbackend.entites.User;
+import org.example.demo.authappbackend.exception.ResourceNotFoundException;
 import org.example.demo.authappbackend.repository.UserRepository;
 import java.util.UUID;
 import org.modelmapper.ModelMapper;
@@ -19,13 +20,15 @@ public class UserServiceImp implements UserService {
     @Autowired
     private ModelMapper modelMapper;
 
+
+
     @Override
     public UserDto createUser(UserDto userDto) throws IllegalAccessException {
         if (userDto.getEmail().isBlank() || userDto.getEmail() == null) {
             throw new IllegalAccessException("Email is required");
         }
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
-            throw new IllegalAccessException("Email is Already exist");
+            throw new  ResourceNotFoundException("Email already exist");
         }
         User user = modelMapper.map(userDto, User.class);
         user.setProvider(userDto.getProvider() != null ? userDto.getProvider() : Provider.LOCAL);

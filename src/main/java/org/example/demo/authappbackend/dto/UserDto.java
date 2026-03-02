@@ -31,4 +31,5 @@ public class UserDto {
     private String gender;
     private Provider provider = Provider.LOCAL;
     private Set<Role> roles= new HashSet<>();
+    private String token;
 }
